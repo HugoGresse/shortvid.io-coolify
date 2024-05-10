@@ -6,7 +6,7 @@ WORKDIR /usr/src/app
 USER root
 RUN apk add --no-cache ffmpeg
 COPY --chown=chrome package.json ./
-RUN npm install -g pnpm
+RUN npm install -g pnpm@8
 RUN pnpm install
 COPY --chown=chrome . ./
 ENTRYPOINT ["tini", "--"]
