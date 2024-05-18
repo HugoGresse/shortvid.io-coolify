@@ -15,6 +15,7 @@ import morgan from 'morgan';
 
 const app = express();
 const port = process.env.PORT || 8000;
+const buildDate = new Date().toISOString();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
@@ -61,6 +62,10 @@ app.post('/:compositionId/', async (req, res) => {
 			inputProps,
 			composition: video,
 			codec: 'h264',
+			x264Preset: 'superfast',
+			chromiumOptions: {
+				enableMultiProcessOnLinux: true,
+			}
 		});
 
 		sendFile(finalOutput);
@@ -127,6 +132,12 @@ app.post('/frame/:compositionId/:frameId', async (req, res) => {
 	}
 });
 
+app.get('/builddate', (req, res) => {
+	res.json({
+		date: buildDate,
+	});
+});
+
 app.listen(port, async () => {
 	bundled = await bundle('remotion/index.tsx');
 	const compositions = await getCompositions(bundled);
@@ -139,6 +150,7 @@ app.listen(port, async () => {
 		[
 			`🚀 The server has started on http://localhost:${port}!`,
 			'🔗 You can render a video by passing props as URL parameters.',
+			`Running build date: ${buildDate}`,
 			'',
 			'🧪 To generate a video, try this :',
 			'',

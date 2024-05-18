@@ -6,6 +6,7 @@ WORKDIR /usr/src/app
 USER root
 RUN apk add --no-cache ffmpeg
 COPY --chown=chrome package.json ./
+COPY --chown=chrome pnpm-lock.yaml ./
 RUN npm install -g pnpm@8
 RUN pnpm install
 COPY --chown=chrome . ./
