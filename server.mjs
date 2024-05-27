@@ -12,10 +12,12 @@ import path from 'path';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import morgan from 'morgan';
+import nodePackage from './package.json' with { type: "json" };
+
+const version = nodePackage.version
 
 const app = express();
 const port = process.env.PORT || 8000;
-const buildDate = new Date().toISOString();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
@@ -132,9 +134,9 @@ app.post('/frame/:compositionId/:frameId', async (req, res) => {
 	}
 });
 
-app.get('/builddate', (req, res) => {
+app.get('/version', (req, res) => {
 	res.json({
-		date: buildDate,
+		version: version
 	});
 });
 
@@ -150,7 +152,7 @@ app.listen(port, async () => {
 		[
 			`🚀 The server has started on http://localhost:${port}!`,
 			'🔗 You can render a video by passing props as URL parameters.',
-			`Running build date: ${buildDate}`,
+			`Running version: ${version}`,
 			'',
 			'🧪 To generate a video, try this :',
 			'',
